@@ -59,3 +59,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	moul.io/http2curl/v2 v2.3.0 // indirect
 )
+
+replace github.com/RaymondCode/simple-demo => ../Joeyzsy/douyin-app-demo/tree/dev/lyz

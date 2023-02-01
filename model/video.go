@@ -5,15 +5,13 @@ import (
 )
 
 type Video struct {
-	Id            int64       `json:"id,omitempty"`
-	UserInfoId    int64       `json:"-"`
-	Author        UserInfo    `json:"user_id,omitempty" gorm:"-"` //这里应该是作者对视频的一对多的关系，而不是视频对作者，故gorm不能存他，但json需要返回它
-	PlayUrl       string      `json:"play_url,omitempty"`
-	CoverUrl      string      `json:"cover_url,omitempty"`
-	FavoriteCount int64       `json:"favorite_count,omitempty"`
-	CommentCount  int64       `json:"comment_count,omitempty"`
-	Title         string      `json:"title,omitempty"`
-	Users         []*UserInfo `json:"-" gorm:"many2many:user_favor_videos;"`
-	CreatedAt     time.Time   `json:"-"`
-	UpdatedAt     time.Time   `json:"-"`
+	Id             int       `json:"id" gorm:"id"`
+	User_id        int       `json:"user_id" gorm:"user_id"`
+	Play_url       string    `json:"paly_url" gorm:"paly_url"`
+	Cover_url      string    `json:"cover_url" gorm:"cover_url"`
+	Title          string    `json:"title" gorm:"title"`
+	Favorite_count int       `json:"favorite_count" gorm:"favorite_count"`
+	Comment_count  int       `json:"comment_count" gorm:"comment_count"`
+	Created_time   time.Time `json:"created_time" gorm:"created_time"`
+	Updated_time   time.Time `json:"updated_time" gorm:"updated_time"`
 }
