@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -15,6 +16,7 @@ type FeedResponse struct {
 
 // Feed same demo video list for every request
 func Feed(c *gin.Context) {
+	fmt.Print("feed start!")
 
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  Response{StatusCode: 0},

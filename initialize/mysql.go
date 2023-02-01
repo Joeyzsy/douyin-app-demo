@@ -7,6 +7,9 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
+	"github.com/RaymondCode/simple-demo/global"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 // Mysql 一个mysql库对于的结构体
@@ -51,4 +54,19 @@ func DBConnectString() string {
 		Info.DB.Charset, Info.DB.ParseTime)
 	log.Println(arg)
 	return arg
+}
+func initDB() {
+	fmt.Printf("Start initDB")
+	var err error
+	//gorm.Open(mysql.Open(DBConnectString()),&gorm.Config)
+
+	global.DB, err = gorm.Open(mysql.Open(DBConnectString()), &gorm.Config{
+		PrepareStmt:            true, //缓存预编译命令
+		SkipDefaultTransaction: true, //禁用默认事务操作
+		//Logger:                 logger.Default.LogMode(logger.Info), //打印sql语句
+	})
+	if err != nil {
+		fmt.Printf("连接数据库失败，请检查参数", err)
+	}
+
 }

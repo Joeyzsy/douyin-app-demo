@@ -8,6 +8,8 @@ import (
 func main() {
 	go service.RunMessageServer()
 
+	//initialize.initDB()
+
 	r := gin.Default()
 
 	initRouter(r)
