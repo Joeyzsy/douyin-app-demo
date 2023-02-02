@@ -5,9 +5,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for comment
 -- ----------------------------
-DROP TABLE IF EXISTS `comment`;
-CREATE TABLE `comment` (
-   `id` varchar(24) NOT NULL,
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE `comments` (
+   `id` int(32) AUTO_INCREMENT NOT NULL,
    `author_id` varchar(24) NOT NULL COMMENT '评论的视频是哪个作者（vloger）的关联id',
    `comment_user_id` varchar(24) NOT NULL COMMENT '发布留言的用户id',
    `content` varchar(128) NOT NULL COMMENT '留言内容',
@@ -21,7 +21,7 @@ CREATE TABLE `comment` (
 -- ----------------------------
 DROP TABLE IF EXISTS `fans`;
 CREATE TABLE `fans` (
-    `id` varchar(24) NOT NULL,
+    `id` int(32) AUTO_INCREMENT NOT NULL,
     `author_id` varchar(24) NOT NULL COMMENT '作者用户id',
     `fan_id` varchar(24) NOT NULL COMMENT '粉丝用户id',
     `is_fan_friend_of_mine` int(1) NOT NULL COMMENT '粉丝是否是vloger的朋友，如果成为朋友，则本表的双方此字段都需要设置为1，如果有一人取关，则两边都需要设置为0',
@@ -34,9 +34,9 @@ CREATE TABLE `fans` (
 -- ----------------------------
 -- Table structure for my_liked_video
 -- ----------------------------
-DROP TABLE IF EXISTS `my_liked_vlog`;
-CREATE TABLE `my_liked_vlog` (
-     `id` varchar(24) NOT NULL,
+DROP TABLE IF EXISTS `my_liked_vlogs`;
+CREATE TABLE `my_liked_vlogs` (
+     `id` int(32) AUTO_INCREMENT NOT NULL,
      `user_id` varchar(24) NOT NULL COMMENT '用户id',
      `video_id` varchar(24) NOT NULL COMMENT '喜欢的短视频id',
      PRIMARY KEY (`id`) USING BTREE,
@@ -50,12 +50,13 @@ CREATE TABLE `my_liked_vlog` (
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-     `id` varchar(24) NOT NULL,
+     `id` int(32) AUTO_INCREMENT NOT NULL,
+     `user_id` int(32) NOT NULL,
      `user_name` varchar(16) NOT NULL COMMENT '用户名',
      `password` varchar(32) NOT NULL COMMENT '密码',
-     `token` varchar(32) NOT NULL COMMENT 'token',
-     `follow_count` int(12) NOT NULL COMMENT '关注总数',
-     `follower_count` int(12) NOT NULL COMMENT '粉丝总数',
+     `token` varchar(32) NOT NULL DEFAULT '' COMMENT 'token' ,
+     `follow_count` int(12) NOT NULL DEFAULT 0 COMMENT '关注总数' ,
+     `follower_count` int(12) NOT NULL DEFAULT 0 COMMENT '粉丝总数',
      PRIMARY KEY (`id`),
      UNIQUE KEY `user_name` (`user_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
@@ -67,8 +68,8 @@ CREATE TABLE `users` (
 -- ----------------------------
 DROP TABLE IF EXISTS `videos`;
 CREATE TABLE `videos` (
-      `id` varchar(24) NOT NULL,
-      `user_id` varchar(24) NOT NULL COMMENT '视频作者',
+      `id` int(32) AUTO_INCREMENT NOT NULL,
+      `user_id` int(32) NOT NULL COMMENT '视频作者',
       `play_url` varchar(255) NOT NULL COMMENT '视频播放地址',
       `cover_url` varchar(255) NOT NULL COMMENT '视频封面地址',
       `title` varchar(255) NOT NULL COMMENT '视频标题',
