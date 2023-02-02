@@ -1,9 +1,10 @@
 package controller
 
 import (
+	"github.com/Joeyzsy/douyin-app-demo/pkg/errno"
+	"github.com/Joeyzsy/douyin-app-demo/service/user"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"sync/atomic"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
@@ -36,23 +37,23 @@ func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
-	token := username + password
+	service := user.UserServiceImpl{}
+	resp := service.RegisterUser(username, password)
 
-	if _, exist := usersLoginInfo[token]; exist {
+	if resp.ReturnErr == errno.UserAlreadyExistErr {
+		// search for user_name to see if exists
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
-	} else {
-		atomic.AddInt64(&userIdSequence, 1)
-		newUser := User{
-			Id:   userIdSequence,
-			Name: username,
-		}
-		usersLoginInfo[token] = newUser
+	} else if resp.ReturnErr == errno.Success {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
-			UserId:   userIdSequence,
-			Token:    username + password,
+			UserId:   resp.Userid,
+			Token:    resp.Token,
+		})
+	} else {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "Service error"},
 		})
 	}
 }
@@ -61,32 +62,35 @@ func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
-	token := username + password
-
-	if user, exist := usersLoginInfo[token]; exist {
+	service := user.UserServiceImpl{}
+	resp := service.LoginUser(username, password)
+	if resp.ReturnErr == errno.Success {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
+			UserId:   resp.Userid,
+			Token:    resp.Token,
 		})
 	} else {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
+			Response: Response{StatusCode: 1, StatusMsg: resp.ReturnErr.ErrMsg}})
 	}
 }
 
 func UserInfo(c *gin.Context) {
 	token := c.Query("token")
 
-	if user, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 0},
-			User:     user,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
-	}
+	c.JSON(http.StatusOK, UserResponse{
+		Response: Response{StatusCode: 0, StatusMsg: token + "zsy"},
+	})
+
+	//if user, exist := usersLoginInfo[token]; exist {
+	//	c.JSON(http.StatusOK, UserResponse{
+	//		Response: Response{StatusCode: 0},
+	//		User:     user,
+	//	})
+	//} else {
+	//	c.JSON(http.StatusOK, UserResponse{
+	//		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+	//	})
+	//}
 }
