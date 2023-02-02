@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/RaymondCode/simple-demo/global"
-	"github.com/RaymondCode/simple-demo/model"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -71,10 +71,5 @@ func InitDB() {
 		fmt.Printf("result.RowsAffected: %v\n", users[0])
 		fmt.Println("********************")
 	*/
-	var videos []model.Video
-	result := global.DB.Find(&videos)
-	fmt.Println("********************")
-	fmt.Printf("result.RowsAffected: %v\n", result.RowsAffected)
-	fmt.Printf("result.RowsAffected: %v\n", videos[0])
-	fmt.Println("********************")
+
 }

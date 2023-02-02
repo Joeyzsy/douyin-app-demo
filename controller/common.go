@@ -5,6 +5,7 @@ type Response struct {
 	StatusMsg  string `json:"status_msg,omitempty"`
 }
 
+// Video视频信息响应结构体
 type Video struct {
 	Id            int64  `json:"id,omitempty"`
 	Author        User   `json:"author"`
