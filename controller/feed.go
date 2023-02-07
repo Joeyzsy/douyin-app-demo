@@ -105,7 +105,7 @@ func Feed(c *gin.Context) {
 
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  Response{StatusCode: 0},
-		VideoList: videoJsonList,
+		VideoList: DemoVideos,
 		NextTime:  time.Now().Unix(),
 	})
 }

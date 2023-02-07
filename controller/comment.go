@@ -15,7 +15,7 @@ type CommentActionResponse struct {
 	Comment Comment `json:"comment,omitempty"`
 }
 
-// CommentAction no practical effect, just check if token is valid
+//     CommentAction no practical effect, just check if token is valid
 func CommentAction(c *gin.Context) {
 	token := c.Query("token")
 	actionType := c.Query("action_type")

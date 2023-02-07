@@ -2,9 +2,11 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"path/filepath"
+
+	"github.com/RaymondCode/simple-demo/service"
+	"github.com/gin-gonic/gin"
 )
 
 type VideoListResponse struct {
@@ -13,13 +15,14 @@ type VideoListResponse struct {
 }
 
 // Publish check token then save upload file to public directory
+// publish 投稿接口
 func Publish(c *gin.Context) {
 	token := c.PostForm("token")
-
-	if _, exist := usersLoginInfo[token]; !exist {
-		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-		return
-	}
+	//判断用户是否存在
+	//if _, exist := usersLoginInfo[token]; !exist {
+	//	c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+	//	return
+	//}
 
 	data, err := c.FormFile("data")
 	if err != nil {
@@ -29,11 +32,25 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
+	/*videoID, err := global.ID_GENERATOR.NextID()
+	if err != nil {
+		// 无法生成ID
+		c.JSON(http.StatusInternalServerError, Response{
+			StatusCode: 1,
+			StatusMsg:  err.Error(),
+		})
+		return
+	}*/
+	videoID := 12
 
 	filename := filepath.Base(data.Filename)
+
 	user := usersLoginInfo[token]
+
 	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
+
 	saveFile := filepath.Join("./public/", finalName)
+
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		c.JSON(http.StatusOK, Response{
 			StatusCode: 1,
@@ -41,6 +58,7 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
+	err = service.PublishVideo(uint64(user.Id), uint64(videoID), saveFile, saveFile, filename)
 
 	c.JSON(http.StatusOK, Response{
 		StatusCode: 0,
