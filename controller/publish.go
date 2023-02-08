@@ -2,8 +2,8 @@ package controller
 
 import (
 	"fmt"
-	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/Joeyzsy/douyin-app-demo/pkg/errno"
+	resp2 "github.com/Joeyzsy/douyin-app-demo/service/resp"
 	"github.com/Joeyzsy/douyin-app-demo/service/video"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -14,7 +14,7 @@ import (
 
 type VideoListResponse struct {
 	Response
-	VideoList []model.VideoResp `json:"video_list"`
+	VideoList []resp2.VideoResp `json:"video_list"`
 }
 
 // Publish check token then save upload file to public directory

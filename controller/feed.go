@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Joeyzsy/douyin-app-demo/global"
 	"github.com/Joeyzsy/douyin-app-demo/model"
+	"github.com/Joeyzsy/douyin-app-demo/service/resp"
 	"github.com/Joeyzsy/douyin-app-demo/service/video"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -13,8 +14,8 @@ import (
 
 type FeedResponse struct {
 	Response
-	VideoList []model.VideoResp `json:"video_list,omitempty"`
-	NextTime  int64             `json:"next_time,omitempty"`
+	VideoList []resp.VideoResp `json:"video_list,omitempty"`
+	NextTime  int64            `json:"next_time,omitempty"`
 }
 
 // Feed same demo video list for every request
@@ -34,11 +35,11 @@ func Feed(c *gin.Context) {
 		return
 	}
 
-	resp := video.GetvideoAndAuthor(&videoList, &authorList, LatestTime, global.FEED_NUM)
-	if resp.NumVideos == 0 {
+	response := video.GetvideoAndAuthor(&videoList, &authorList, LatestTime, global.FEED_NUM)
+	if response.NumVideos == 0 {
 		// 没有满足条件的视频 使用当前时间再获取一遍
-		resp := video.GetvideoAndAuthor(&videoList, &authorList, LatestTime, global.FEED_NUM)
-		if resp.NumVideos == 0 {
+		response := video.GetvideoAndAuthor(&videoList, &authorList, LatestTime, global.FEED_NUM)
+		if response.NumVideos == 0 {
 			// 后端没有视频了
 			c.JSON(http.StatusOK, FeedResponse{
 				Response:  Response{StatusCode: 0},
@@ -49,11 +50,11 @@ func Feed(c *gin.Context) {
 		}
 	}
 
+	videoJsonList := make([]resp.VideoResp, 0, response.NumVideos)
 	var (
-		videoJsonList = make([]model.VideoResp, 0, resp.NumVideos)
-		videoJson     model.VideoResp
-		//author         model.Users
-		authorJson     model.User
+		videoJson resp.VideoResp
+		//author         response.Users
+		authorJson     resp.User
 		isFavoriteList []bool
 		//isFollowList   []bool
 		isLogged = false // 用户是否传入了合法有效的token（是否登录）

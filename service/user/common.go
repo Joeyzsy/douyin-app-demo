@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/Joeyzsy/douyin-app-demo/pkg/errno"
+	"github.com/Joeyzsy/douyin-app-demo/service/resp"
 )
 
 type UserRegisterResponse struct {
@@ -12,6 +12,6 @@ type UserRegisterResponse struct {
 }
 
 type UserInfoResponse struct {
-	User      model.User
+	User      resp.User
 	ReturnErr errno.ErrNo
 }

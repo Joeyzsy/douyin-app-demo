@@ -20,13 +20,13 @@ func CommentAction(c *gin.Context) {
 	token := c.Query("token")
 	actionType := c.Query("action_type")
 
-	if user, exist := usersLoginInfo[token]; exist {
+	if _, exist := usersLoginInfo[token]; exist {
 		if actionType == "1" {
 			text := c.Query("comment_text")
 			c.JSON(http.StatusOK, CommentActionResponse{Response: Response{StatusCode: 0},
 				Comment: Comment{
-					Id:         1,
-					User:       user,
+					Id: 1,
+					//User:       user,
 					Content:    text,
 					CreateDate: "05-01",
 				}})
