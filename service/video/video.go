@@ -5,16 +5,17 @@ import (
 	"github.com/Joeyzsy/douyin-app-demo/global"
 	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/Joeyzsy/douyin-app-demo/pkg/errno"
+	"github.com/Joeyzsy/douyin-app-demo/service/resp"
 	"github.com/Joeyzsy/douyin-app-demo/service/user"
 	"time"
 )
 
 type VideoServiceImpl struct{}
 
-func (s *VideoServiceImpl) GetPublishedVideosByUserId(userId int64) ([]model.VideoResp, error) {
+func (s *VideoServiceImpl) GetPublishedVideosByUserId(userId int64) ([]resp.VideoResp, error) {
 	videoList, err := db.GetVideoListById(userId)
 
-	res := make([]model.VideoResp, len(videoList))
+	res := make([]resp.VideoResp, len(videoList))
 
 	userservice := user.UserServiceImpl{}
 
@@ -23,7 +24,7 @@ func (s *VideoServiceImpl) GetPublishedVideosByUserId(userId int64) ([]model.Vid
 
 	var i int
 	for i = 0; i < len(videoList); i++ {
-		var video model.VideoResp
+		var video resp.VideoResp
 
 		video.Id = int64(videoList[i].Id)
 		video.Author = userEntity

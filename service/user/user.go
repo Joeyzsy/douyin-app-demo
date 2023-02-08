@@ -4,6 +4,8 @@ import (
 	"github.com/Joeyzsy/douyin-app-demo/dal/db"
 	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/Joeyzsy/douyin-app-demo/pkg/errno"
+	resp2 "github.com/Joeyzsy/douyin-app-demo/service/resp"
+	"github.com/jinzhu/copier"
 	"time"
 )
 
@@ -71,7 +73,7 @@ func (s *UserServiceImpl) RegisterUser(name string, pwd string) (resp UserRegist
 }
 
 func (s *UserServiceImpl) GetUserInfo(userId int64) (resp UserInfoResponse) {
-	resp = UserInfoResponse{model.User{}, errno.Success}
+	resp = UserInfoResponse{resp2.User{}, errno.Success}
 
 	user, err := db.GetUserById(userId)
 
@@ -80,7 +82,10 @@ func (s *UserServiceImpl) GetUserInfo(userId int64) (resp UserInfoResponse) {
 		return resp
 	}
 
-	resp.User = user
+	userInfo := resp2.User{}
+	copier.Copy(&userInfo, &user)
+
+	resp.User = userInfo
 
 	return resp
 }

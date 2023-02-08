@@ -5,6 +5,7 @@ import (
 	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/Joeyzsy/douyin-app-demo/pkg/errno"
 	"github.com/Joeyzsy/douyin-app-demo/service/follow"
+	"github.com/Joeyzsy/douyin-app-demo/service/resp"
 	"github.com/Joeyzsy/douyin-app-demo/service/user"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -21,7 +22,7 @@ var usersLoginInfo = map[string]model.User{
 		Name:          "zhanglei",
 		FollowCount:   10,
 		FollowerCount: 5,
-		IsFollow:      true,
+		//IsFollow:      true,
 	},
 }
 
@@ -35,7 +36,7 @@ type UserLoginResponse struct {
 
 type UserResponse struct {
 	Response
-	User model.User `json:"user"`
+	User resp.User `json:"user"`
 }
 
 func Register(c *gin.Context) {
@@ -94,7 +95,7 @@ func UserInfo(c *gin.Context) {
 		return
 	}
 
-	// 获取指定用户的信息
+	// 调用User Service, 获取指定用户的信息
 	userModelResp := userService.GetUserInfo(int64(userID))
 	if userModelResp.ReturnErr != errno.Success {
 		c.JSON(http.StatusInternalServerError, Response{StatusCode: 1, StatusMsg: errno.ParamErr.ErrMsg})
@@ -104,7 +105,7 @@ func UserInfo(c *gin.Context) {
 	// 获取当前用户的 ID
 	curUserID := c.GetUint64("UserID")
 
-	// 判断当前用户是否关注指定用户
+	// 调用Follow Service, 判断当前用户是否关注指定用户
 	followStatusResp := followService.GetFollowStatus(int64(curUserID), int64(userID))
 	if followStatusResp.ReturnErr != errno.Success {
 		c.JSON(http.StatusInternalServerError, Response{StatusCode: 1, StatusMsg: errno.ParamErr.ErrMsg})
@@ -113,17 +114,10 @@ func UserInfo(c *gin.Context) {
 
 	userModelResp.User.IsFollow = followStatusResp.IsFollow
 
-	var resp = UserResponse{
-		Response: Response{StatusCode: 0, StatusMsg: "OK"},
-	}
-	resp.User = userModelResp.User
-	log.Println("In userinfo controller---user: ", resp.User)
-	c.JSON(http.StatusOK, resp)
-
-	token := c.Query("token")
-
+	log.Println("In userinfo controller---user: ", userModelResp.User)
 	c.JSON(http.StatusOK, UserResponse{
-		Response: Response{StatusCode: 0, StatusMsg: token + "zsy"},
+		Response: Response{StatusCode: 0, StatusMsg: "OK"},
+		User:     userModelResp.User,
 	})
 
 }

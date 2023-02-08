@@ -1,8 +1,11 @@
 package controller
 
-import "github.com/Joeyzsy/douyin-app-demo/model"
+import (
+	//"github.com/Joeyzsy/douyin-app-demo/model"
+	resp2 "github.com/Joeyzsy/douyin-app-demo/service/resp"
+)
 
-var DemoVideos = []model.VideoResp{
+var DemoVideos = []resp2.VideoResp{
 	{
 		Id:            1,
 		Author:        DemoUser,
@@ -23,10 +26,10 @@ var DemoComments = []Comment{
 	},
 }
 
-var DemoUser = model.User{
-	Id:            1,
+var DemoUser = resp2.User{
+	UserId:        1,
 	Name:          "TestUser",
 	FollowCount:   0,
 	FollowerCount: 0,
-	IsFollow:      false,
+	//IsFollow:      false,
 }
