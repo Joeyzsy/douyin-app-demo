@@ -21,6 +21,7 @@ func CreateUser(users []*model.User) (err error) {
 // GetUserByName QueryUser query list of user info
 func GetUserByName(userName []string) ([]*model.User, error) {
 	res := make([]*model.User, 0)
+
 	if err := DB.Where("user_name in ?", userName).Find(&res).Error; err != nil {
 		return nil, err
 	}

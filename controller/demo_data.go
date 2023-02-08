@@ -2,7 +2,7 @@ package controller
 
 import "github.com/Joeyzsy/douyin-app-demo/model"
 
-var DemoVideos = []Video{
+var DemoVideos = []model.VideoResp{
 	{
 		Id:            1,
 		Author:        DemoUser,

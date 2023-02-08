@@ -14,7 +14,7 @@ import (
 
 type VideoListResponse struct {
 	Response
-	VideoList []model.Video `json:"video_list"`
+	VideoList []model.VideoResp `json:"video_list"`
 }
 
 // Publish check token then save upload file to public directory

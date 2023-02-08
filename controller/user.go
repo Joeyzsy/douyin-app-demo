@@ -79,7 +79,7 @@ func Login(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: resp.ReturnErr.ErrMsg}})
+			Response: Response{StatusCode: 1, StatusMsg: "Service error"}})
 	}
 }
 
@@ -119,4 +119,11 @@ func UserInfo(c *gin.Context) {
 	resp.User = userModelResp.User
 	log.Println("In userinfo controller---user: ", resp.User)
 	c.JSON(http.StatusOK, resp)
+
+	token := c.Query("token")
+
+	c.JSON(http.StatusOK, UserResponse{
+		Response: Response{StatusCode: 0, StatusMsg: token + "zsy"},
+	})
+
 }

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -8,8 +9,8 @@ import (
 
 type FeedResponse struct {
 	Response
-	VideoList []Video `json:"video_list,omitempty"`
-	NextTime  int64   `json:"next_time,omitempty"`
+	VideoList []model.VideoResp `json:"video_list,omitempty"`
+	NextTime  int64             `json:"next_time,omitempty"`
 }
 
 // Feed same demo video list for every request

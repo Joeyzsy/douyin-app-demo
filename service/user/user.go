@@ -31,6 +31,7 @@ func (s *UserServiceImpl) LoginUser(name string, pwd string) (resp UserRegisterR
 		resp.ReturnErr = errno.PwdWrongErr
 		return resp
 	}
+
 	resp.Userid = users[0].Id
 	resp.Token = users[0].Token
 	return resp

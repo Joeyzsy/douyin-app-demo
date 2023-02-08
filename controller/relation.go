@@ -8,6 +8,7 @@ import (
 
 type UserListResponse struct {
 	Response
+
 	UserList []model.User `json:"user_list"`
 }
 
@@ -28,6 +29,7 @@ func FollowList(c *gin.Context) {
 		Response: Response{
 			StatusCode: 0,
 		},
+
 		UserList: []model.User{DemoUser},
 	})
 }
@@ -38,6 +40,7 @@ func FollowerList(c *gin.Context) {
 		Response: Response{
 			StatusCode: 0,
 		},
+
 		UserList: []model.User{DemoUser},
 	})
 }
@@ -48,6 +51,7 @@ func FriendList(c *gin.Context) {
 		Response: Response{
 			StatusCode: 0,
 		},
+
 		UserList: []model.User{DemoUser},
 	})
 }
