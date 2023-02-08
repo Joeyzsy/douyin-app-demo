@@ -2,20 +2,19 @@ package controller
 
 import (
 	"fmt"
-	"net/http"
-	"strconv"
-	"time"
-
 	"github.com/Joeyzsy/douyin-app-demo/global"
 	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/Joeyzsy/douyin-app-demo/service/video"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"strconv"
+	"time"
 )
 
 type FeedResponse struct {
 	Response
-	VideoList []Video `json:"video_list,omitempty"`
-	NextTime  int64   `json:"next_time,omitempty"`
+	VideoList []model.VideoResp `json:"video_list,omitempty"`
+	NextTime  int64             `json:"next_time,omitempty"`
 }
 
 // Feed same demo video list for every request
@@ -51,10 +50,10 @@ func Feed(c *gin.Context) {
 	}
 
 	var (
-		videoJsonList = make([]Video, 0, resp.NumVideos)
-		videoJson     Video
+		videoJsonList = make([]model.VideoResp, 0, resp.NumVideos)
+		videoJson     model.VideoResp
 		//author         model.Users
-		authorJson     User
+		authorJson     model.User
 		isFavoriteList []bool
 		//isFollowList   []bool
 		isLogged = false // 用户是否传入了合法有效的token（是否登录）
@@ -85,10 +84,10 @@ func Feed(c *gin.Context) {
 		*/
 		videoJson.Id = int64(video.Id)
 		videoJson.Author = authorJson
-		videoJson.PlayUrl = video.Play_url
-		videoJson.CoverUrl = video.Cover_url
-		videoJson.FavoriteCount = int64(video.Favorite_count)
-		videoJson.CommentCount = int64(video.Comment_count)
+		videoJson.PlayUrl = video.PlayUrl
+		videoJson.CoverUrl = video.CoverUrl
+		videoJson.FavoriteCount = int64(video.FavoriteCount)
+		videoJson.CommentCount = int64(video.CommentCount)
 		//videoJson. = video.Title
 		videoJson.IsFavorite = isFavorite
 

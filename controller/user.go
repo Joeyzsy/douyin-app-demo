@@ -1,16 +1,21 @@
 package controller
 
 import (
+	"fmt"
+	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/Joeyzsy/douyin-app-demo/pkg/errno"
+	"github.com/Joeyzsy/douyin-app-demo/service/follow"
 	"github.com/Joeyzsy/douyin-app-demo/service/user"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
+	"strconv"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
 // user data will be cleared every time the server starts
 // test data: username=zhanglei, password=douyin
-var usersLoginInfo = map[string]User{
+var usersLoginInfo = map[string]model.User{
 	"zhangleidouyin": {
 		Id:            1,
 		Name:          "zhanglei",
@@ -30,7 +35,7 @@ type UserLoginResponse struct {
 
 type UserResponse struct {
 	Response
-	User User `json:"user"`
+	User model.User `json:"user"`
 }
 
 func Register(c *gin.Context) {
@@ -62,6 +67,8 @@ func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
+	fmt.Println(username, " ", password)
+
 	service := user.UserServiceImpl{}
 	resp := service.LoginUser(username, password)
 	if resp.ReturnErr == errno.Success {
@@ -72,25 +79,51 @@ func Login(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: resp.ReturnErr.ErrMsg}})
+			Response: Response{StatusCode: 1, StatusMsg: "Service error"}})
 	}
 }
 
 func UserInfo(c *gin.Context) {
+	userService := user.UserServiceImpl{}
+	followService := follow.FollowServiceImpl{}
+
+	// 获取指定用户的 ID
+	userID, err := strconv.ParseUint(c.Query("user_id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Response{StatusCode: int32(errno.ParamErr.ErrCode), StatusMsg: errno.ParamErr.ErrMsg})
+		return
+	}
+
+	// 获取指定用户的信息
+	userModelResp := userService.GetUserInfo(int64(userID))
+	if userModelResp.ReturnErr != errno.Success {
+		c.JSON(http.StatusInternalServerError, Response{StatusCode: 1, StatusMsg: errno.ParamErr.ErrMsg})
+		return
+	}
+
+	// 获取当前用户的 ID
+	curUserID := c.GetUint64("UserID")
+
+	// 判断当前用户是否关注指定用户
+	followStatusResp := followService.GetFollowStatus(int64(curUserID), int64(userID))
+	if followStatusResp.ReturnErr != errno.Success {
+		c.JSON(http.StatusInternalServerError, Response{StatusCode: 1, StatusMsg: errno.ParamErr.ErrMsg})
+		return
+	}
+
+	userModelResp.User.IsFollow = followStatusResp.IsFollow
+
+	var resp = UserResponse{
+		Response: Response{StatusCode: 0, StatusMsg: "OK"},
+	}
+	resp.User = userModelResp.User
+	log.Println("In userinfo controller---user: ", resp.User)
+	c.JSON(http.StatusOK, resp)
+
 	token := c.Query("token")
 
 	c.JSON(http.StatusOK, UserResponse{
 		Response: Response{StatusCode: 0, StatusMsg: token + "zsy"},
 	})
 
-	//if user, exist := usersLoginInfo[token]; exist {
-	//	c.JSON(http.StatusOK, UserResponse{
-	//		Response: Response{StatusCode: 0},
-	//		User:     user,
-	//	})
-	//} else {
-	//	c.JSON(http.StatusOK, UserResponse{
-	//		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-	//	})
-	//}
 }

@@ -1,13 +1,15 @@
 package controller
 
 import (
+	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type UserListResponse struct {
 	Response
-	UserList []User `json:"user_list"`
+
+	UserList []model.User `json:"user_list"`
 }
 
 // RelationAction no practical effect, just check if token is valid
@@ -27,7 +29,8 @@ func FollowList(c *gin.Context) {
 		Response: Response{
 			StatusCode: 0,
 		},
-		UserList: []User{DemoUser},
+
+		UserList: []model.User{DemoUser},
 	})
 }
 
@@ -37,7 +40,8 @@ func FollowerList(c *gin.Context) {
 		Response: Response{
 			StatusCode: 0,
 		},
-		UserList: []User{DemoUser},
+
+		UserList: []model.User{DemoUser},
 	})
 }
 
@@ -47,6 +51,7 @@ func FriendList(c *gin.Context) {
 		Response: Response{
 			StatusCode: 0,
 		},
-		UserList: []User{DemoUser},
+
+		UserList: []model.User{DemoUser},
 	})
 }

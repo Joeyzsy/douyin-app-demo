@@ -1,6 +1,8 @@
 package controller
 
-var DemoVideos = []Video{
+import "github.com/Joeyzsy/douyin-app-demo/model"
+
+var DemoVideos = []model.VideoResp{
 	{
 		Id:            1,
 		Author:        DemoUser,
@@ -21,7 +23,7 @@ var DemoComments = []Comment{
 	},
 }
 
-var DemoUser = User{
+var DemoUser = model.User{
 	Id:            1,
 	Name:          "TestUser",
 	FollowCount:   0,
