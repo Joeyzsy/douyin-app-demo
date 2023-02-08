@@ -1,20 +1,16 @@
+
 module github.com/Joeyzsy/douyin-app-demo
 
 go 1.17
 
 require (
-	github.com/gavv/httpexpect/v2 v2.8.0
+  github.com/gavv/httpexpect/v2 v2.8.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/stretchr/testify v1.7.0
-)
-
-require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
-)
-
-require (
+	github.com/sony/sonyflake v1.1.0 // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

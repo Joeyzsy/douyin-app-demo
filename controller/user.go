@@ -48,7 +48,7 @@ func Register(c *gin.Context) {
 	if resp.ReturnErr == errno.UserAlreadyExistErr {
 		// search for user_name to see if exists
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
+			Response: Response{StatusCode: 1, StatusMsg: resp.ReturnErr.ErrMsg},
 		})
 	} else if resp.ReturnErr == errno.Success {
 		c.JSON(http.StatusOK, UserLoginResponse{
@@ -58,7 +58,7 @@ func Register(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "Service error"},
+			Response: Response{StatusCode: 1, StatusMsg: resp.ReturnErr.ErrMsg},
 		})
 	}
 }
