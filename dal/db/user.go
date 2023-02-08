@@ -8,7 +8,7 @@ import (
 func GetUserById(userID int64) (model.User, error) {
 	var res model.User
 
-	DB.Where("id = ?", userID).Find(&res)
+	DB.Where("user_id = ?", userID).Find(&res)
 
 	return res, nil
 }

@@ -59,7 +59,7 @@ func (s *UserServiceImpl) RegisterUser(name string, pwd string) (resp UserRegist
 
 	userid := GenerateUserId()
 	token := GenerateToken(name, pwd)
-	user := &model.User{Name: name, Password: pwd, Id: userid, Token: token}
+	user := &model.User{Name: name, Password: pwd, UserId: userid, Token: token}
 	err = db.CreateUser([]*model.User{user})
 	if err != nil {
 		resp.ReturnErr = errno.ServiceErr
