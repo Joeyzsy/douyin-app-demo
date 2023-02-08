@@ -1,6 +1,7 @@
 package controller
 
 import (
+
 	"fmt"
 	"net/http"
 	"strconv"
@@ -10,6 +11,7 @@ import (
 	"github.com/Joeyzsy/douyin-app-demo/model"
 	"github.com/Joeyzsy/douyin-app-demo/service/video"
 	"github.com/gin-gonic/gin"
+
 )
 
 type FeedResponse struct {
@@ -20,6 +22,7 @@ type FeedResponse struct {
 
 // Feed same demo video list for every request
 func Feed(c *gin.Context) {
+<<<<<<< HEAD
 	fmt.Print("feed start!\n")
 	var videoList []model.Video
 	var authorList []model.Users
@@ -98,6 +101,11 @@ func Feed(c *gin.Context) {
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  Response{StatusCode: 0},
 		VideoList: videoJsonList,
+=======
+	c.JSON(http.StatusOK, FeedResponse{
+		Response:  Response{StatusCode: 0},
+		VideoList: DemoVideos,
+>>>>>>> main
 		NextTime:  time.Now().Unix(),
 	})
 }
