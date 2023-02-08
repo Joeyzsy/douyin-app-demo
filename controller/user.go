@@ -7,6 +7,7 @@ import (
 	"github.com/Joeyzsy/douyin-app-demo/service/follow"
 	"github.com/Joeyzsy/douyin-app-demo/service/user"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -116,5 +117,6 @@ func UserInfo(c *gin.Context) {
 		Response: Response{StatusCode: 0, StatusMsg: "OK"},
 	}
 	resp.User = userModelResp.User
+	log.Println("In userinfo controller---user: ", resp.User)
 	c.JSON(http.StatusOK, resp)
 }

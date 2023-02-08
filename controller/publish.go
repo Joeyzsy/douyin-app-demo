@@ -2,14 +2,19 @@ package controller
 
 import (
 	"fmt"
+	"github.com/Joeyzsy/douyin-app-demo/model"
+	"github.com/Joeyzsy/douyin-app-demo/pkg/errno"
+	"github.com/Joeyzsy/douyin-app-demo/service/video"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
 )
 
 type VideoListResponse struct {
 	Response
-	VideoList []Video `json:"video_list"`
+	VideoList []model.Video `json:"video_list"`
 }
 
 // Publish check token then save upload file to public directory
@@ -50,10 +55,34 @@ func Publish(c *gin.Context) {
 
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
+	// 获取 userID
+	userId, err := strconv.ParseUint(c.Query("user_id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusOK, Response{
+			StatusCode: int32(errno.ParamErr.ErrCode),
+			StatusMsg:  errno.ParamErr.ErrMsg,
+		})
+		return
+	}
+
+	videoService := video.VideoServiceImpl{}
+
+	// 得到用户发布过的视频
+	videoList, err := videoService.GetPublishedVideosByUserId(int64(userId))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			StatusCode: 1,
+			StatusMsg:  err.Error(),
+		})
+		return
+	}
+
+	log.Println("In publish controller------videoList: ", videoList)
+
 	c.JSON(http.StatusOK, VideoListResponse{
 		Response: Response{
 			StatusCode: 0,
 		},
-		VideoList: DemoVideos,
+		VideoList: videoList,
 	})
 }
