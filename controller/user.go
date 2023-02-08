@@ -37,9 +37,6 @@ func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
-	service := user.UserServiceImpl{}
-	resp := service.RegisterUser(username, password)
-
 	if resp.ReturnErr == errno.UserAlreadyExistErr {
 		// search for user_name to see if exists
 		c.JSON(http.StatusOK, UserLoginResponse{
@@ -48,6 +45,9 @@ func Register(c *gin.Context) {
 	} else if resp.ReturnErr == errno.Success {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
+			UserId:   userIdSequence,
+			Token:    username + password,
+
 			UserId:   resp.Userid,
 			Token:    resp.Token,
 		})
